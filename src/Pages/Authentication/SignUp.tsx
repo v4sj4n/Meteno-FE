@@ -1,9 +1,9 @@
-import { backendDir } from '@/Constants'
-import axios from 'axios'
+import { SimpleAxios } from '@/utils/AxiosInstances'
+import { UserCirclePlus } from '@phosphor-icons/react'
 import { FormEvent, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-export const SignUp = () => {
+export default function SignUp () {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -22,7 +22,7 @@ export const SignUp = () => {
       return
     }
     try {
-      const res = await axios.post(`${backendDir}/auth/signup`, {
+      const res = await SimpleAxios.post(`/auth/sign-up`, {
         firstName,
         lastName,
         email,
@@ -54,6 +54,8 @@ export const SignUp = () => {
 
   return (
     <main className="w-full h-screen flex justify-center items-center flex-col gap-8 bg-zinc-700 ">
+      <UserCirclePlus size={48} className="fill-zinc-200" />
+
       <h1 className="text-5xl font-bold text-zinc-200">Sign Up</h1>
       <form
         onSubmit={handleSubmit}
@@ -114,7 +116,10 @@ export const SignUp = () => {
         <div className="flex justify-between items-center">
           <button className="bg-green-300 px-4 py-2 rounded-md">Sign Up</button>
           <p>
-            Already have an account? <a href="/auth/login">Log In</a>
+            Already have an account?{' '}
+            <Link to="/auth/sign-in" className="hover:underline">
+              Sign In
+            </Link>
           </p>
         </div>
       </form>
