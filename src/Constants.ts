@@ -1,1 +1,1 @@
-export const backendDir = 'http://localhost:3000'
+export const backendDir = 'http://192.168.1.12:3000'

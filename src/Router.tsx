@@ -6,6 +6,7 @@ import SignIn from './Pages/Authentication/SignIn'
 import Dashboard from './Pages/Dashboard'
 import { ProtectedRoute } from './Components/ProtectedRoute'
 import { Navbar } from './Components/Navbar'
+import UserProfile from './Pages/UserProfile'
 
 const Layout = () => {
   return (
@@ -37,6 +38,10 @@ export default function Router() {
         {
           path: '/dashboard',
           element: <ProtectedRoute children={<Dashboard />} />,
+        },
+        {
+          path: '/my-profile',
+          element: <ProtectedRoute children={<UserProfile />} />,
         },
         {
           path: '*',
