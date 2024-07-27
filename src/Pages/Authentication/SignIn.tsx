@@ -46,14 +46,14 @@ export default function SignIn() {
       <h1 className="text-5xl font-bold text-zinc-200">Sign In</h1>
       <form
         onSubmit={handleSubmit}
-        className="mx-4 md:w-3/5 lg:w-2/5 bg-slate-200 p-4 rounded-lg space-y-3"
+        className="mx-4 md:w-3/5 lg:w-2/5 bg-white  p-4 rounded-lg space-y-3"
       >
         <input
           type="email"
           placeholder="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 rounded-md text-lg"
+          className="w-full p-2 rounded-md text-lg bg-slate-200"
           required
         />
         <input
@@ -61,7 +61,7 @@ export default function SignIn() {
           placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 rounded-md text-lg"
+          className="w-full p-2 rounded-md text-lg bg-slate-200"
           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
           required
         />

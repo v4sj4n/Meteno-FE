@@ -37,15 +37,14 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }, [token])
 
   if (isAuthenticated === null) {
-    // Still checking authentication status
     return <div>Loading...</div>
   }
 
   if (!isAuthenticated) {
-    // User is not authenticated, redirect to login
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
     return <Navigate to="/auth/sign-in" />
   }
 
-  // User is authenticated, render children
   return children
 }

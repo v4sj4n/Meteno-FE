@@ -71,63 +71,68 @@ export default function UserProfile() {
   if (user === null) return <h1>Loading...</h1>
   return (
     <main className="w-full mt-8 lg:mt-36 flex justify-center items-center flex-col gap-8">
-            {openImageChanger && (
+      {openImageChanger && (
         <UploadImageModal handleClose={handleImageChangerClick} />
       )}
 
-<div className='flex gap-4 md:flex-col items-center justify-center'>
-<UserList size={48} className="fill-zinc-200" />
-<h1 className="text-2xl md:text-5xl  font-bold text-zinc-200">Your Profile</h1>
-</div>
-
+      <div className="flex gap-4 items-center  justify-center">
+        <UserList size={36} className="fill-lavenderTitleColor" />
+        <h1 className="text-2xl md:text-5xl text-lavenderTitleColor  font-bold">
+          Your Profile
+        </h1>
+      </div>
 
       <form
         onSubmit={handleSubmit}
-        className="mx-4 md:w-3/5 lg:w-2/5 bg-slate-200 pt-8 pb-4 px-4 rounded-lg space-y-3"
+        className="mx-4 md:w-3/5 lg:w-2/5 bg-white pt-8 pb-4 px-4 rounded-lg space-y-3"
       >
-        <div className='flex flex-col justify-center items-center'>
+        <div className="flex flex-col  justify-center items-center">
           <img
             src={user.imageUrl}
             alt={`${user.firstName}' profile image`}
             className="size-24 rounded-full object-cover"
           />
-          <button className='hover:text-zinc-500' type="button" onClick={handleImageChangerClick}>
+          <button
+            className="hover:text-zinc-500"
+            type="button"
+            onClick={handleImageChangerClick}
+          >
             Change picture
           </button>
         </div>
-        <div className='grid grid-cols-2 gap-2'>
-        <label>
-          First Name:
-          <input
-            type="text"
-            className="w-full p-2 rounded-md md:text-lg"
-            placeholder=""
-            value={user.firstName}
-            onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-          />
-        </label>
-        <label>
-          Last Name:
-          <input
-            type="text"
-            className="w-full p-2 rounded-md md:text-lg"
-            placeholder=""
-            value={user.lastName}
-            onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-          />
-        </label>
-        </div>
+        <div className="grid grid-cols-2 gap-2 ">
+          <label>
+            First Name:
+            <input
+              type="text"
+              className="w-full p-2 rounded-md md:text-lg bg-slate-200"
+              placeholder=""
+              value={user.firstName}
+              onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+            />
+          </label>
+          <label>
+            Last Name:
+            <input
+              type="text"
+              className="w-full p-2 rounded-md md:text-lg bg-slate-200"
+              placeholder=""
+              value={user.lastName}
+              onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+            />
+          </label>
 
-        <label>
-          Bio:
-          <input
-            type="text"
-            className="w-full p-2 rounded-md md:text-lg"
-            placeholder=""
-            value={user.bio}
-            onChange={(e) => setUser({ ...user, bio: e.target.value })}
-          />
-        </label>
+          <label className="col-span-2">
+            Bio:
+            <input
+              type="text"
+              className="w-full p-2 rounded-md md:text-lg bg-slate-200"
+              placeholder=""
+              value={user.bio}
+              onChange={(e) => setUser({ ...user, bio: e.target.value })}
+            />
+          </label>
+        </div>
 
         {error && <p className="text-red-500">{error}</p>}
 

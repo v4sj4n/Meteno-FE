@@ -74,7 +74,7 @@ export const UploadImageModal = ({ handleClose }: { handleClose(): void }) => {
             <img
               src={previewImage}
               alt="preview image"
-              className="hover:brightness-[.25] rounded-md"
+              className="cursor-pointer hover:brightness-[.25] rounded-md "
               onClick={clearImage}
             />
           )}
@@ -89,7 +89,7 @@ export const UploadImageModal = ({ handleClose }: { handleClose(): void }) => {
 
           <button
             type="button"
-            className="text-red-500 px-4 py-2 rounded-md ml-2"
+            className="decoration-wavy hover:underline  px-4 py-2 rounded-md ml-2"
             onClick={handleClose}
           >
             Close
