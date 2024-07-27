@@ -1,7 +1,9 @@
+import { SignOut, UserPlus, SignIn as SignInIcon } from '@phosphor-icons/react'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 export const Navbar = () => {
+  const pathName = useLocation().pathname
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -32,54 +34,89 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="w-full bg-accent flex justify-between items-center px-4 py-2 md:px-16 md:py-6 uppercase font-thin  relative">
-      <h3 className="text-2xl md:text-3xl text-accent-content font-bold">
-        <Link to="/"> Meteno</Link>
-      </h3>
-      <button className="md:hidden block" onClick={toggleMenu} aria-label="Toggle menu">
-        &#9776;
-      </button>
-      <ul className="md:flex gap-4 hidden">
-        {elementsToDisplay.map(({ title, location }) => (
-          <li key={title} className='text-primary-content'>
-            <Link
-              to={location}
-              className="hover:underline font-medium"
-              onClick={() => {
-                if (title === 'Logout') {
-                  logOut()
-                }
-              }}
+    <div className="navbar bg-base-300">
+      <div className="flex-1">
+        <Link to="/" className="btn btn-ghost text-xl">
+          Meteno
+        </Link>
+      </div>
+      <div>
+        <div className="dropdown dropdown-end md:hidden">
+          <label tabIndex={0} className="btn btn-ghost" onClick={toggleMenu}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              {title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {isMenuOpen && (
-        <div className="absolute top-0 left-0 w-full h-screen bg-zinc-800 flex flex-col items-center py-8 md:hidden">
-          <button className="self-end font-extrabold mr-8 text-2xl" onClick={closeMenu} aria-label="Close menu">
-            &times;
-          </button>
-          <ul className="flex flex-col gap-4 mt-8">
-            {elementsToDisplay.map(({ title, location }) => (
-              <li key={title} className="hover:text-opacity-75 text-primary">
-                <Link
-                  to={location}
-                  className='text-primary'
-                  onClick={() => {
-                    if (title === 'Logout') {
-                      logOut()
-                    }
-                  }}
-                >
-                  {title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
+            </svg>
+          </label>
+          {isMenuOpen && (
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-30 p-2 shadow bg-base-300 rounded-box w-32  space-y-1 "
+            >
+              {elementsToDisplay.map((element, index) => (
+                <li key={index}>
+                  {element.location !== '' ? (
+                    <Link
+                      className={
+                        element.location === pathName ? 'font-bold' : ''
+                      }
+                      to={element.location}
+                      onClick={closeMenu}
+                    >
+                      {element.title === 'Sign In' ? (
+                        <SignInIcon />
+                      ) : element.title === 'Sign Up' ? (
+                        <UserPlus />
+                      ) : (
+                        ''
+                      )}
+                      {element.title}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        logOut()
+                        closeMenu()
+                      }}
+                    >
+                      {element.title}
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      )}
-    </nav>
+        <ul className="menu menu-horizontal px-1 hidden md:flex">
+          {elementsToDisplay.map((element, index) => (
+            <li key={index}>
+              {element.location !== '' ? (
+                <Link
+                  className={element.location === pathName ? 'font-bold' : ''}
+                  to={element.location}
+                >
+                  {element.title}
+                </Link>
+              ) : (
+                <button className="flex" onClick={logOut}>
+                  {element.title}
+                  <SignOut />
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   )
 }

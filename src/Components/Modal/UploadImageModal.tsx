@@ -49,38 +49,34 @@ export const UploadImageModal = ({ handleClose }: { handleClose(): void }) => {
 
   return (
     <ModalTemplate>
-      
-        <h3 className="text-2xl font-bold mb-4">Please upload an image</h3>
-        <form onSubmit={handleSubmit}
-         className='flex flex-col gap-4'
-
+      <h3 className="text-2xl font-bold mb-4">Please upload an image</h3>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input
+          type="file"
+          name=""
+          onChange={onImageChange}
+          id=""
+          className="hidden"
+          ref={fileInput}
+        />
+        <div
+          className=" flex justify-center items-center hover:bg-gray-300 bg-gray-200 px-4 py-2 rounded-md cursor-pointer "
+          onClick={() => fileInput.current?.click()}
         >
-          <input
-            type="file"
-            name=""
-            onChange={onImageChange}
-            id=""
-            className="hidden"
-            ref={fileInput}
+          <FileImage size={32} className="inline-block" />
+          <p className="inline-block">Upload image</p>
+        </div>
+        {previewImage && (
+          <img
+            src={previewImage}
+            alt="preview image"
+            className="cursor-pointer hover:brightness-[.25] rounded-md "
+            onClick={clearImage}
           />
-          <div
-            className=" flex justify-center items-center hover:bg-gray-300 bg-gray-200 px-4 py-2 rounded-md cursor-pointer "
-            onClick={() => fileInput.current?.click()}
-          >
-            <FileImage size={32} className="inline-block" />
-            <p className="inline-block">Upload image</p>
-          </div>
-          {previewImage && (
-            <img
-              src={previewImage}
-              alt="preview image"
-              className="cursor-pointer hover:brightness-[.25] rounded-md "
-              onClick={clearImage}
-            />
-          )}
+        )}
 
-<div className='flex justify-between'>
-<button
+        <div className="flex justify-between">
+          <button
             className="bg-green-300 px-4 py-2 rounded-md"
             disabled={file === null}
           >
@@ -94,9 +90,8 @@ export const UploadImageModal = ({ handleClose }: { handleClose(): void }) => {
           >
             Close
           </button>
-</div>
-        </form>
-      
+        </div>
+      </form>
     </ModalTemplate>
   )
 }

@@ -6,7 +6,8 @@ import SignIn from './Pages/Authentication/SignIn'
 import Dashboard from './Pages/Dashboard'
 import { ProtectedRoute } from './Components/ProtectedRoute'
 import { Navbar } from './Components/Navbar'
-import UserProfile from './Pages/UserProfile'
+import UserProfile from './Pages/User/UserProfile'
+import { ChangePassword } from './Pages/User/ChangePassword'
 
 const Layout = () => {
   return (
@@ -19,7 +20,6 @@ const Layout = () => {
 export default function Router() {
   const router = createBrowserRouter([
     {
-      // path: "/"
       element: <Layout />,
       children: [
         {
@@ -42,6 +42,10 @@ export default function Router() {
         {
           path: '/my-profile',
           element: <ProtectedRoute children={<UserProfile />} />,
+        },
+        {
+          path: '/change-password',
+          element: <ProtectedRoute children={<ChangePassword />} />,
         },
         {
           path: '*',

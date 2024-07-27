@@ -1,6 +1,6 @@
+import { Modal } from '@/Components/Modal/Modal'
 import { UploadImageModal } from '@/Components/Modal/UploadImageModal'
 import { TokenAxios } from '@/utils/AxiosInstances'
-import { UserList } from '@phosphor-icons/react'
 import { FormEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -16,10 +16,13 @@ type User = {
 }
 export default function UserProfile() {
   const [user, setUser] = useState<Partial<User> | null>(null)
-
   const [error, setError] = useState<string | null>(null)
-
   const [openImageChanger, setOpenImageChanger] = useState(false)
+
+
+  
+
+
 
   const handleImageChangerClick = () => {
     setOpenImageChanger((prev) => !prev)
@@ -70,17 +73,61 @@ export default function UserProfile() {
 
   if (user === null) return <h1>Loading...</h1>
   return (
-    <main className="w-full mt-8 lg:mt-36 flex justify-center items-center flex-col gap-8">
+    <main className="w-full mt-8 md:mt-20 lg:mt-32 flex justify-center items-center flex-col gap-4 md:gap-8 ">
+      <h1 className="text-2xl md:text-4xl font-bold ">
+        Your Profile
+      </h1>
       {openImageChanger && (
         <UploadImageModal handleClose={handleImageChangerClick} />
       )}
-
-      <div className="flex gap-4 items-center  justify-center">
-        <UserList size={36} className="fill-lavenderTitleColor" />
-        <h1 className="text-2xl md:text-5xl text-lavenderTitleColor  font-bold">
-          Your Profile
-        </h1>
+      <div className="card bg-base-100 w-96 shadow-xl">
+        <figure>
+          <img src={user.imageUrl} alt="Shoes" />
+        </figure>
+        <div className="card-body">
+          <h2 className="card-title flex items-center gap-3">
+            {user.firstName} {user.lastName}
+            <p className="text-sm italic opacity-80">{user.username}</p>
+            {/* <div className="badge badge-secondary">NEW</div> */}
+          </h2>
+          <p>{user.bio}</p>
+          <p>{user.email}</p>
+          <h3 className="font-bold">What would you like to change?</h3>
+          <div className="card-actions justify-between">
+            <Link to={"/change-password"} className="badge badge-outline p-2.5 hover:bg-white cursor-pointer hover:text-black">
+              Password
+            </Link>
+            <div className="badge badge-outline p-2.5 hover:bg-white cursor-pointer hover:text-black">
+              Profile image
+            </div>
+            <div className="badge badge-outline p-2.5 hover:bg-white cursor-pointer hover:text-black">
+              Bio
+            </div>
+            <div className="badge badge-outline p-2.5 hover:bg-white cursor-pointer hover:text-black">
+              Email
+            </div>
+          </div>
+        </div>
       </div>
+
+      <button
+        className="btn"
+        onClick={() => {
+          const modal = document.getElementById(
+            'my_modal'
+          ) as HTMLDialogElement
+          if (modal) {
+            modal.showModal()
+          }
+        }}
+      >
+        open modal
+      </button>
+      <Modal>
+        <h3>Hello from the modal!</h3>
+        <p>This is a modal</p>
+      </Modal>
+
 
       <form
         onSubmit={handleSubmit}
@@ -144,7 +191,7 @@ export default function UserProfile() {
             </Link>
           </p>
         </div>
-      </form>
+      </form> 
     </main>
   )
 }

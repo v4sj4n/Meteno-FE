@@ -21,6 +21,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       }
 
       try {
+        await new Promise<void>((resolve) => {
+          setTimeout(() => {
+            resolve()
+          }, 1200)
+        })
         await axios.get(`${backendDir}/auth/get-user`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,7 +42,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }, [token])
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>
+    return (
+      <main className="grid justify-center items-center h-[88svh]">
+        <span className="loading loading-dots loading-lg"></span>
+      </main>
+    )
   }
 
   if (!isAuthenticated) {

@@ -1,82 +1,107 @@
+import { FullInput } from '@/Components/Inputs/FormInputs'
+import { signInSchema, signInType } from '@/Schemas/SignIn.schema'
 import { SimpleAxios } from '@/utils/AxiosInstances'
-import { UsersThree } from '@phosphor-icons/react'
-import { FormEvent, useState } from 'react'
+import { ErrorMsgForm } from '@/utils/ErrorMsgForm'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Envelope, Password } from '@phosphor-icons/react'
+import { AxiosError } from 'axios'
+import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function SignIn() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const [error, setError] = useState<string | null>(null)
-
   const navigate = useNavigate()
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(signInSchema),
+  })
+
+  const onSubmitHandler = async (data: signInType) => {
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        resolve()
+      }, 456)
+    })
     try {
-      const res = await SimpleAxios.post(`/auth/sign-in`, {
-        email,
-        password,
-      })
-      console.log(res.data)
-      if (res.status !== 200) {
-        setError(res.data.message)
-      } else {
-        console.log(res)
+      console.log({data})
+      const res = await SimpleAxios.post(`/auth/sign-in`, data)
+      if (res.status === 200) {
         localStorage.setItem('token', res.data.access_token)
         localStorage.setItem('user', JSON.stringify(res.data.user))
-
         navigate('/dashboard')
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      if (err.response && err.response.status === 409) {
-        setError('Username or email is already taken')
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        console.log(err.response?.data)
+        setError('root', {
+          message: err.response?.data?.message,
+        })
       } else {
-        setError('An error occurred while trying to sign up')
+        setError('root', {
+          message: 'An error occurred while trying to sign in',
+        })
       }
-      console.log(err)
     }
   }
 
   return (
-    <main className="w-full mt-16 lg:mt-40 flex justify-center items-center flex-col gap-8">
-      <UsersThree size={48} className="fill-zinc-200" />
-
-      <h1 className="text-5xl font-bold text-zinc-200">Sign In</h1>
+    <main className="w-full mt-8 md:mt-20 lg:mt-36 flex justify-center items-center flex-col gap-4 md:gap-8 ">
+      <h1 className="text-2xl md:text-4xl font-bold text-zinc-200">Sign In</h1>
       <form
-        onSubmit={handleSubmit}
-        className="mx-4 md:w-3/5 lg:w-2/5 bg-white  p-4 rounded-lg space-y-3"
+        onSubmit={handleSubmit(onSubmitHandler)}
+        className="mx-4 md:w-4/5 lg:w-2/5 bg-base-300 p-4 rounded-box"
       >
-        <input
-          type="email"
-          placeholder="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 rounded-md text-lg bg-slate-200"
-          required
-        />
-        <input
-          type="password"
-          placeholder="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 rounded-md text-lg bg-slate-200"
-          pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-          required
-        />
-        {error && <p className="text-red-500">{error}</p>}
-
-        <div className="flex justify-between items-center">
-          <button className="bg-green-300 px-4 py-2 rounded-md">Sign In</button>
-          <p>
-            Don't have an account?{' '}
-            <Link className="hover:underline" to="/auth/sign-up">
-              Sign Up
-            </Link>
-          </p>
+        <div className="space-y-4 mt-2 mb-6">
+          <FullInput
+            icon={Envelope}
+            type="email"
+            placeholder="Email"
+            register={register}
+            errors={errors}
+            name="email"
+          />
+          <FullInput
+            icon={Password}
+            type="password"
+            placeholder="Password"
+            register={register}
+            errors={errors}
+            name="password"
+          />
+          {errors.root && <ErrorMsgForm>{errors.root.message}</ErrorMsgForm>}
         </div>
+        <button
+          className={`${
+            isSubmitting ? 'btn-disabled' : 'btn-accent'
+          } btn  px-8 w-full`}
+        >
+          <span
+            className={`${
+              isSubmitting ? 'text-accent' : ''
+            } flex items-center gap-2`}
+          >
+            {isSubmitting ? (
+              <>
+                <span className="loading  loading-spinner loading-xs text-accent"></span>
+                Signing in
+              </>
+            ) : (
+              'Sign In'
+            )}
+          </span>
+        </button>
       </form>
+      <p className="text-sm">
+        Don't have an account?{' '}
+        <Link to="/auth/sign-up" className="link link-accent text-right">
+          Sign Up
+        </Link>
+      </p>
     </main>
   )
 }
