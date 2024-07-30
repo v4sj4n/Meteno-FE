@@ -1,15 +1,16 @@
-import { ErrorMsgForm } from '@/utils/ErrorMsgForm'
-import { IconProps } from '@phosphor-icons/react'
-import { FieldErrors, UseFormRegister } from 'react-hook-form'
+import { ErrorMsgForm } from "@/utils/ErrorMsgForm";
+import { IconProps } from "@phosphor-icons/react";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 interface FullInputProps {
-  icon?: React.ComponentType<IconProps>
-  type: string
-  placeholder: string
+  icon?: React.ComponentType<IconProps>;
+  type: string;
+  placeholder: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  register: UseFormRegister<any>
-  errors: FieldErrors
-  name: string
+  register: UseFormRegister<any>;
+  errors: FieldErrors;
+  name: string;
+  value?: string;
 }
 
 export const FullInput: React.FC<FullInputProps> = ({
@@ -19,21 +20,23 @@ export const FullInput: React.FC<FullInputProps> = ({
   register,
   errors,
   name,
+  value,
 }) => {
   return (
     <span className="block w-full">
       <label className="input input-bordered flex items-center gap-4">
-        {Icon ? <Icon/> : null}
+        {Icon ? <Icon /> : null}
         <input
           type={type}
           {...register(name)}
           className="grow"
           placeholder={placeholder}
+          defaultValue={value ? value : ""}
         />
       </label>
       {errors[name] && (
         <ErrorMsgForm>{errors[name]?.message as string}</ErrorMsgForm>
       )}
     </span>
-  )
-}
+  );
+};
